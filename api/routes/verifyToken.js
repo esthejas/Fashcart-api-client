@@ -3,8 +3,10 @@ const jwt = require("jsonwebtoken")
 const verifyToken = (req,res,next)=>{
     const authHeader = req.headers.token
     if (authHeader) {
-        const token = authHeader;
+        // const token = authHeader;
+        const token = authHeader.split(" ")[1];
         // console.log(token);
+        // console.log(authHeader+"hello");
         jwt.verify(token,process.env.JWT_SEC,(err,user)=>{
             // console.log(user);
             if(err) res.status(403).json("Token is not valid!")
@@ -29,7 +31,7 @@ const verifyTokenAndAuthorisation = (req,res,next)=>{
 
 const verifyTokenAndAdmin = (req,res,next)=>{
     verifyToken(req,res,()=>{
-        // console.log( req.user.isAdmin);
+        // console.log( req.user);
         if(req.user.isAdmin){
            next()
         }else{

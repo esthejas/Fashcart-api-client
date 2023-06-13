@@ -33,6 +33,8 @@ router.post("/login",async(req,res)=>{
         const user = await User.findOne({username: req.body.username})
         !user && res.status(401).json("wrong credentials!")
 
+        // console.log(user);
+
         const hashedPassword = CryptoJs.AES.decrypt(
             user.password,
             process.env.PASS_SEC)
@@ -46,14 +48,15 @@ router.post("/login",async(req,res)=>{
             isAdmin:user.isAdmin,
          },
          process.env.JWT_SEC,
-         {expiresIn:"3d"}
+         {expiresIn:"30d"}
          );
          
         const {password, ...others} = user._doc;
         console.log(accessToken);
         res.status(200).json({...others,accessToken})
     } catch (err) {
-        res.status(500).json(err)
+        // res.status(500).json(err)
+        // console.log(err);
     }
 
 })
